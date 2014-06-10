@@ -1,7 +1,5 @@
 #MongoDumper
-This class allows you to dump any local mongoDB database, utilizing shell command
-to do so. If there is an error, please verify that the backup folder has the 
-correct permissions and this script has execute permissions.
+This class allows you to dump any local mongoDB database, utilizing shell command to do so. If there is an error, please verify that the backup folder has the correct permissions and this script has execute permissions. The script executes mongodump and then zips the dump contents and deletes the original dump folder to conserve disk space.
 
 ##Examples
 $dumper = new MongoDumper("/var/www/html/db-backups");  
