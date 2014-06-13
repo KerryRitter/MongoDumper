@@ -8,4 +8,4 @@ $dumper->run("mydb2", true); // 'true' shows debug info
 $dumper->run("mydb3");
 
 ##Disclaimer
-Use at your own risk. This script uses shell_exec and rmdir. Shell_exec prevents security risks that you must handle in your own environment. Rmdir can cause damage to your file system if the backup path is not entered correctly. While I use this script myself without issue, *neither I nor Acumen Consulting is responsible for any damage done by this script. *
+Use at your own risk. This script uses shell_exec and rmdir. Shell_exec prevents security risks that you must handle in your own environment. Rmdir can cause damage to your file system if the backup path is not entered correctly. While I use this script myself without issue, **neither I nor Acumen Consulting is responsible for any damage done by this script.**
