@@ -1,0 +1,6 @@
+# mxwl runtime directory — never commit
+.mxwl/
+
+# OS
+.DS_Store
+Thumbs.db
