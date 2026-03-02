@@ -13,11 +13,15 @@
 
 class MongoDumper {
 	private $_BACKUP_FOLDER = "";
-	private $_CURRENT_DATE_TIME = ""; 
+	private $_CURRENT_DATE_TIME = "";
 	private $current_dump_path = "";
 	private $database = "";
 	private $files_to_delete = array();
 	private $debug = false;
+	private $progress_callback = null;
+	private $current_stage = "";
+	private $total_files = 0;
+	private $processed_files = 0;
 
 	public function __construct($backup_folder) {
 		$now = new DateTime;
@@ -35,19 +39,27 @@ class MongoDumper {
 
 			$this->echo_if_debug("<ol>");
 			$this->echo_if_debug("<li>Executing mongodump...</li>");
+			$this->report_progress('mongodump', 0, 'Starting mongodump...');
 			$this->mongodump();
+			$this->report_progress('mongodump', 100, 'mongodump complete');
 
 			$this->echo_if_debug("<li>Zipping files...</li>");
+			$this->report_progress('zip', 0, 'Starting zip operation...');
 			$this->zip_files();
+			$this->report_progress('zip', 100, 'Zip complete');
 
 			$this->echo_if_debug("<li>Deleting dump folder...</li>");
+			$this->report_progress('cleanup', 0, 'Starting cleanup...');
 			$this->delete_dump_folder();
+			$this->report_progress('cleanup', 100, 'Cleanup complete');
 
 			$this->echo_if_debug("<li>Complete!</li>");
 			$this->echo_if_debug("</ol>");
-			return;
+			$this->report_progress('complete', 100, 'Backup operation complete');
+			return true;
 		}
 		catch (Exception $ex) {
+			$this->report_progress('error', null, 'Error: ' . $ex->getMessage());
 			return false;
 		}
 	}
@@ -58,6 +70,24 @@ class MongoDumper {
 		}
 	}
 
+	public function set_progress_callback($callback) {
+		if (is_callable($callback)) {
+			$this->progress_callback = $callback;
+		}
+	}
+
+	private function report_progress($stage, $progress = null, $message = null) {
+		$this->current_stage = $stage;
+		if ($this->progress_callback !== null) {
+			call_user_func($this->progress_callback, array(
+				'stage' => $stage,
+				'progress' => $progress,
+				'message' => $message,
+				'database' => $this->database
+			));
+		}
+	}
+
 	private function mongodump() {
 		$command = "mongodump --db " . $this->database . " --out " . $this->current_dump_path;
 	    $results = shell_exec($command);
@@ -65,13 +95,30 @@ class MongoDumper {
 	}
 
 	private function zip_files() {
-		$database_dump_folder = $this->current_dump_path . "/" . $this->database; 
+		$database_dump_folder = $this->current_dump_path . "/" . $this->database;
 
 		// Initialize archive object
 		$zip = new ZipArchive;
 		$zip->open($this->current_dump_path . '.zip', ZipArchive::CREATE);
 
 		// Create recursive directory iterator
+		$files = new RecursiveIteratorIterator(
+		    new RecursiveDirectoryIterator($database_dump_folder),
+		    RecursiveIteratorIterator::LEAVES_ONLY
+		);
+
+		// Count total files first
+		$this->total_files = 0;
+		foreach ($files as $file) {
+			if ($file->isFile()) {
+				$this->total_files++;
+			}
+		}
+
+		$this->processed_files = 0;
+		$this->report_progress('zip', 0, 'Found ' . $this->total_files . ' files to zip');
+
+		// Reset iterator and process files
 		$files = new RecursiveIteratorIterator(
 		    new RecursiveDirectoryIterator($database_dump_folder),
 		    RecursiveIteratorIterator::LEAVES_ONLY
@@ -86,6 +133,11 @@ class MongoDumper {
 
 		    // add file to delete queue
 		    $this->files_to_delete[] = $filePath;
+
+		    // Report progress
+		    $this->processed_files++;
+		    $progress = $this->total_files > 0 ? round(($this->processed_files / $this->total_files) * 100) : 0;
+		    $this->report_progress('zip', $progress, 'Zipped file ' . $this->processed_files . ' of ' . $this->total_files);
 		}
 
 		$zip->close();
