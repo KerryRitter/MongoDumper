@@ -94,6 +94,7 @@ Write to `$MXWL_MXWL_DIR/work-item-artifacts/deployment-log.md`:
 {
   "$schema": "./agent-results.schema.json",
   "nextAgentName": "Deployment Validator",
+  "agentStateName": "Complete",
   "newReviewLoopContent": "",
   "newTests": [],
   "updatedTestResults": {},
@@ -106,6 +107,7 @@ Write to `$MXWL_MXWL_DIR/work-item-artifacts/deployment-log.md`:
 {
   "$schema": "./agent-results.schema.json",
   "nextAgentName": "Developer",
+  "agentStateName": "Deploy Failed",
   "newReviewLoopContent": "## Deployment Failed\n\n**Error**: [specific error]\n\n**Output**:\n```\n[relevant output]\n```\n\nAction: Fix the root cause of the build/deployment failure.",
   "newTests": [],
   "updatedTestResults": {},

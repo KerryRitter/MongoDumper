@@ -25,6 +25,13 @@ Read the PM spec:
 cat $MXWL_MXWL_DIR/work-item-artifacts/pm-spec.md
 ```
 
+**If you are returning from human review with feedback, read it now:**
+```bash
+echo "$MXWL_REVIEW_LOOP_CONTENT"
+```
+
+Incorporate all human feedback before writing or revising the technical spec. The human's approval is required before development starts.
+
 ## Step 2: Deep Codebase Research
 
 **Find the best reference feature** — the most similar thing already built in this codebase. Read its complete implementation (not just one file — read the service, API layer, data model, and UI). This is the pattern you will specify.
@@ -101,13 +108,16 @@ Execute in this exact order:
 
 ## Step 4: Write Results
 
+Route to Human for architecture approval. The human will review the technical spec and either approve (assigning to Developer) or send back with feedback (reassigning to Development Architect).
+
 ```json
 {
   "$schema": "./agent-results.schema.json",
-  "nextAgentName": "Developer",
-  "newReviewLoopContent": "",
+  "nextAgentName": "Human",
+  "agentStateName": "Awaiting Approval",
+  "newReviewLoopContent": "## Technical Spec Ready for Review\n\nThe architecture plan has been written and is ready for your approval.\n\n**Read the spec**: check `work-item-artifacts/technical-spec.md` in the repository.\n\n**To approve**: assign this work item to the Developer.\n**To request changes**: add your feedback as a comment and reassign to the Development Architect.",
   "newTests": [],
   "updatedTestResults": {},
-  "summary": "Technical spec written. [1 sentence on architecture approach and reference feature used.]"
+  "summary": "Technical spec written. Awaiting human approval before development begins. [1 sentence on architecture approach and reference feature used.]"
 }
 ```

@@ -96,8 +96,9 @@ Write to `$MXWL_MXWL_DIR/work-item-artifacts/qa-report.md`:
 ```json
 {
   "$schema": "./agent-results.schema.json",
-  "nextAgentName": "",
-  "newReviewLoopContent": "## QA Sign-Off\n\nAll tests pass. [N] new tests added. No regressions. Pipeline complete.",
+  "nextAgentName": "Deployment Agent",
+  "agentStateName": "Complete",
+  "newReviewLoopContent": "",
   "newTests": [
     {
       "id": "path/to/test.ts::test name",
@@ -114,7 +115,7 @@ Write to `$MXWL_MXWL_DIR/work-item-artifacts/qa-report.md`:
       "durationMs": 12
     }
   },
-  "summary": "QA complete. [N] new tests written, all passing. No regressions detected. Pipeline complete."
+  "summary": "QA complete. [N] new tests written, all passing. No regressions detected. Routing to deployment."
 }
 ```
 
@@ -123,7 +124,8 @@ Write to `$MXWL_MXWL_DIR/work-item-artifacts/qa-report.md`:
 {
   "$schema": "./agent-results.schema.json",
   "nextAgentName": "Developer",
-  "newReviewLoopContent": "## QA: Bugs Found\n\n**Failed Tests:**\n- `test name`: [what failed]\n\n**Reproduction:**\n1. [step]\n2. [step]\n\n**Expected**: [behavior]\n**Actual**: [behavior]",
+  "agentStateName": "Tests Failed",
+  "newReviewLoopContent": "## QA: Bugs Found\n\n**Failed Tests:**\n- `test name`: [what failed]\n\n**Reproduction:**\n1. [step]\n2. [step]\n\n**Expected**: [behavior]\n**Actual**: [behavior]\n\n**Fix these bugs and return to QA Engineer.**",
   "newTests": [],
   "updatedTestResults": {
     "failing-test-id": {

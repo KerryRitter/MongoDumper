@@ -20,11 +20,18 @@ cat .documentation/index.md
 
 Follow the index to read relevant architecture, domain, and product docs.
 
-Read previous agent artifacts:
+Read previous agent artifacts and any human feedback:
 ```bash
 ls $MXWL_MXWL_DIR/work-item-artifacts/ 2>/dev/null
 cat $MXWL_MXWL_DIR/work-item-artifacts/validation.md 2>/dev/null
 ```
+
+**If you are returning from human review with feedback, read it now:**
+```bash
+echo "$MXWL_REVIEW_LOOP_CONTENT"
+```
+
+Incorporate all human feedback before writing or revising the spec. The human's approval is required before development starts.
 
 ## Step 2: Research the Codebase
 
@@ -43,7 +50,14 @@ Write to `$MXWL_MXWL_DIR/work-item-artifacts/pm-spec.md`:
 ## Problem Statement
 [2–4 sentences: What problem does this solve? Who has it?]
 
-## User Story
+## User Stories
+
+### Story 1: [Brief Title]
+As a [user type],
+I want to [action],
+So that [outcome/benefit].
+
+### Story 2: [Brief Title] _(add more as needed)_
 As a [user type],
 I want to [action],
 So that [outcome/benefit].
@@ -54,11 +68,18 @@ So that [outcome/benefit].
 - [ ] AC3: [Edge case: what happens with empty/invalid/missing data]
 - [ ] AC4: [Permission boundary: who can or cannot do this]
 
-## User Flow
+## User Flows
+
+### Flow 1: [Name — primary happy path]
 1. User [action at starting point]
 2. System [response]
 3. User [next action]
 4. User sees [outcome]
+
+### Flow 2: [Name — alternative or edge case] _(add more as needed)_
+1. User [action at starting point]
+2. System [response]
+3. User sees [outcome]
 
 ## Scope
 
@@ -77,13 +98,18 @@ So that [outcome/benefit].
 
 ## Step 4: Write Results
 
+**IMPORTANT: `nextAgentName` MUST be `"Human"`. Do not change this value.**
+
+The human will review the spec before development starts. Write this to `.mxwl/agent-results.json`:
+
 ```json
 {
   "$schema": "./agent-results.schema.json",
-  "nextAgentName": "Development Architect",
-  "newReviewLoopContent": "",
+  "nextAgentName": "Human",
+  "agentStateName": "Awaiting Approval",
+  "newReviewLoopContent": "## PM Spec Ready for Review\n\nThe PM spec is ready for your approval before development begins.\n\n**Read the spec**: `work-item-artifacts/pm-spec.md`\n\n**To approve**: click Approve in the UI to continue to Development Architect.\n**To request changes**: add feedback below and the item will be sent back to the Product Manager.",
   "newTests": [],
   "updatedTestResults": {},
-  "summary": "PM spec written. [1 sentence on the core user story and most important acceptance criterion.]"
+  "summary": "PM spec written. Awaiting human approval before architecture begins. [1 sentence on the core user story and most important acceptance criterion.]"
 }
 ```

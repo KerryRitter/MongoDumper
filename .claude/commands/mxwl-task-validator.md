@@ -77,6 +77,7 @@ Write to `$MXWL_MXWL_DIR/work-item-artifacts/validation.md`:
 {
   "$schema": "./agent-results.schema.json",
   "nextAgentName": "Product Manager",
+  "agentStateName": "Complete",
   "newReviewLoopContent": "",
   "newTests": [],
   "updatedTestResults": {},
@@ -88,10 +89,11 @@ Write to `$MXWL_MXWL_DIR/work-item-artifacts/validation.md`:
 ```json
 {
   "$schema": "./agent-results.schema.json",
-  "nextAgentName": "",
-  "newReviewLoopContent": "## Task Validation: Needs Attention\n\n**Verdict**: [verdict]\n\n**Issue**: [what's wrong]\n\n**Action Needed**: [what the human should do]",
+  "nextAgentName": "Human",
+  "agentStateName": "Needs Clarification",
+  "newReviewLoopContent": "## Task Validation: Needs Your Attention\n\n**Verdict**: [verdict]\n\n**Issue**: [specific problem with this work item]\n\n**What to do**: [concrete action — e.g., clarify the goal, split into two work items, close as duplicate of #N]",
   "newTests": [],
   "updatedTestResults": {},
-  "summary": "Validation failed: [reason]. Returned to human for clarification."
+  "summary": "Validation failed: [reason]. Needs human clarification before work can begin."
 }
 ```

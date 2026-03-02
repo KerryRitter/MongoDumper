@@ -19,7 +19,7 @@ cat $MXWL_MXWL_DIR/work-item-artifacts/deployment-log.md
 cat $MXWL_MXWL_DIR/work-item-artifacts/pm-spec.md
 ```
 
-Extract the preview URL. Extract the user flow and acceptance criteria.
+Extract the preview URL. Extract the user flows and acceptance criteria.
 
 ## Step 2: Health Check
 
@@ -37,7 +37,7 @@ If the app requires login, test the full auth flow on the preview environment.
 
 ## Step 4: Feature Smoke Tests
 
-For each step in the PM spec's User Flow, test it on the preview:
+For each step in the PM spec's User Flows, test it on the preview:
 
 1. Navigate to the feature URL on the preview domain
 2. Execute each user action
@@ -98,11 +98,12 @@ Write to `$MXWL_MXWL_DIR/work-item-artifacts/smoke-tests.md`:
 ```json
 {
   "$schema": "./agent-results.schema.json",
-  "nextAgentName": "",
-  "newReviewLoopContent": "## Deployment Validated ✓\n\n**Preview URL**: [URL]\n\nAll smoke tests passed. Feature is live and working on preview. Ready for human review.",
+  "nextAgentName": "Human",
+  "agentStateName": "Awaiting Final Review",
+  "newReviewLoopContent": "## Feature Deployed — Ready for Your Review\n\n**Preview URL**: [URL]\n\nAll smoke tests passed. The feature is live on the preview environment.\n\n**To review**: visit the preview URL and test the feature end-to-end.\n\n**If approved**: close this work item or merge the branch.\n**If changes needed**: add your feedback and reassign to the Product Manager (for spec changes) or Development Architect (for architectural changes) or Developer (for implementation fixes).",
   "newTests": [],
   "updatedTestResults": {},
-  "summary": "Smoke tests passed. Preview healthy at [URL]. Pipeline complete."
+  "summary": "Smoke tests passed. Preview healthy at [URL]. Routing to human for final review."
 }
 ```
 
@@ -111,6 +112,7 @@ Write to `$MXWL_MXWL_DIR/work-item-artifacts/smoke-tests.md`:
 {
   "$schema": "./agent-results.schema.json",
   "nextAgentName": "Deployment Agent",
+  "agentStateName": "Smoke Tests Failed",
   "newReviewLoopContent": "## Smoke Tests Failed\n\n**Preview URL**: [URL]\n\n**Failures:**\n- [test]: [what went wrong]\n\n**Reproduction:**\n1. Navigate to [URL]\n2. [action]\n3. Expected: [outcome]\n4. Actual: [outcome]",
   "newTests": [],
   "updatedTestResults": {},

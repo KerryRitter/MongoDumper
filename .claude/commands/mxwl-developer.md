@@ -25,6 +25,13 @@ cat $MXWL_MXWL_DIR/work-item-artifacts/pm-spec.md
 cat $MXWL_MXWL_DIR/work-item-artifacts/technical-spec.md
 ```
 
+**If you are returning from a reviewer with feedback, read it now — this is your priority:**
+```bash
+echo "$MXWL_REVIEW_LOOP_CONTENT"
+```
+
+Address every issue raised in the review feedback before doing anything else. The feedback tells you exactly what to fix.
+
 Read the reference feature identified in the technical spec — study it in full before writing a single line.
 
 ## Step 2: Implement in Spec Order
@@ -82,7 +89,21 @@ Step-by-step for the next reviewer:
 
 ## Step 4: Write Results
 
-**Determine the next agent:**
+**Determine the next agent based on context:**
+
+**If returning from a Code Review rejection** (MXWL_REVIEW_LOOP_CONTENT contains "## Code Review:"):
+- Route back to `"Code Reviewer"` after fixing the reported issues.
+
+**If returning from a QA failure** (MXWL_REVIEW_LOOP_CONTENT contains "## QA:"):
+- Route back to `"QA Engineer"` after fixing the reported bugs.
+
+**If returning from a Product Review failure** (MXWL_REVIEW_LOOP_CONTENT contains "## Product Review:"):
+- Route back to `"Code Reviewer"` (full review cycle restarts).
+
+**If returning from a UI/UX review failure** (MXWL_REVIEW_LOOP_CONTENT contains "## UI/UX Review:"):
+- Route back to `"UI/UX Reviewer"` after fixing the reported UI issues.
+
+**If this is the first pass through (MXWL_REVIEW_LOOP_CONTENT is empty or not from a reviewer):**
 - If UI changes were made (new or modified pages/components) → `"UI/UX Reviewer"`
 - If backend-only (no UI changes) → `"Code Reviewer"`
 
@@ -90,6 +111,7 @@ Step-by-step for the next reviewer:
 {
   "$schema": "./agent-results.schema.json",
   "nextAgentName": "UI/UX Reviewer",
+  "agentStateName": "Complete",
   "newReviewLoopContent": "",
   "newTests": [],
   "updatedTestResults": {},

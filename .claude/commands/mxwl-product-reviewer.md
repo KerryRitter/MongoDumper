@@ -35,7 +35,7 @@ For each acceptance criterion:
 3. Observe whether the expected outcome occurs
 4. Record PASS or FAIL
 
-Also test the complete **User Flow** from the PM spec end-to-end — not individual criteria in isolation, but the whole thing as a user would experience it.
+Also test each **User Flow** from the PM spec end-to-end — not individual criteria in isolation, but the whole sequence as a user would experience it.
 
 And test **Edge Cases** from the PM spec:
 - Empty state: helpful message shown?
@@ -71,8 +71,11 @@ Write to `$MXWL_MXWL_DIR/work-item-artifacts/product-review.md`:
 | 1 | [criterion] | PASS | [what was observed] |
 | 2 | [criterion] | FAIL | [what went wrong] |
 
-## User Flow Test
-[Did the end-to-end flow work? Notes on each step.]
+## User Flow Tests
+| Flow | Status | Notes |
+|------|--------|-------|
+| [flow name] | PASS | [notes] |
+| [flow name] | FAIL | [what went wrong] |
 
 ## Edge Cases
 | Edge Case | Status | Notes |
@@ -91,6 +94,7 @@ Write to `$MXWL_MXWL_DIR/work-item-artifacts/product-review.md`:
 {
   "$schema": "./agent-results.schema.json",
   "nextAgentName": "QA Engineer",
+  "agentStateName": "Complete",
   "newReviewLoopContent": "",
   "newTests": [],
   "updatedTestResults": {},
@@ -103,7 +107,8 @@ Write to `$MXWL_MXWL_DIR/work-item-artifacts/product-review.md`:
 {
   "$schema": "./agent-results.schema.json",
   "nextAgentName": "Developer",
-  "newReviewLoopContent": "## Product Review: Needs Rework\n\n**Failed Criteria:**\n- AC2: [what failed]\n- AC4: [what failed]\n\n**Reproduction Steps:**\n[Exact steps]\n\nDo not proceed to QA until all criteria pass.",
+  "agentStateName": "Needs Rework",
+  "newReviewLoopContent": "## Product Review: Needs Rework\n\n**Failed Acceptance Criteria:**\n- AC2: [what failed — expected vs. actual behavior]\n- AC4: [what failed — expected vs. actual behavior]\n\n**Reproduction Steps:**\n1. [Navigate to]\n2. [Action]\n3. Expected: [outcome]\n4. Actual: [outcome]\n\n**Do not proceed to QA until all acceptance criteria pass.**",
   "newTests": [],
   "updatedTestResults": {},
   "summary": "Product review failed. [N] of [M] criteria not met. Routing to Developer with specific gaps."
